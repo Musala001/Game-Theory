@@ -20,40 +20,54 @@ int main() {
     iota(rows.begin(), rows.end(), 0);
     iota(cols.begin(), cols.end(), 0);
 
-    bool turn = 0; // 0 = row, 1 = col
-
+    bool turn = 0;
     while(rows.size()>1 || cols.size()>1){
         if(turn==0 && rows.size()>1){
             for(int i=0;i<rows.size();i++){
                 bool dominated = false;
                 for(int j=0;j<rows.size();j++){
-                    if(i==j) continue;
-                    bool d = true;
+                    if(i==j) {
+                        continue;
+                    }
+                    bool less = true;
                     for(int c:cols){
-                        if(mat[i][c].first >= mat[j][c].first){
-                            d = false;
+                        if(mat[rows[i]][c].first >= mat[rows[j]][c].first){
+                            less = false;
                             break;
                         }
                     }
-                    if(d){ dominated = true; break; }
+                    if(less){
+                        dominated = true;
+                        break;
+                    }
                 }
-                if(dominated){ rows.erase(rows.begin()+i); break; }
+                if(dominated){
+                    rows.erase(rows.begin()+i);
+                    break;
+                }
             }
-        } else if(turn==1 && cols.size()>1){
+        }
+        else if(turn==1 && cols.size()>1){
             for(int i=0;i<cols.size();i++){
                 bool dominated = false;
                 for(int j=0;j<cols.size();j++){
                     if(i==j) continue;
-                    bool d = true;
+                    bool less = true;
                     for(int r:rows){
-                        if(mat[r][i].second >= mat[r][j].second){
-                            d = false;
+                        if(mat[r][cols[i]].second >= mat[r][cols[j]].second){
+                            less = false;
                             break;
                         }
                     }
-                    if(d){ dominated = true; break; }
+                    if(less){
+                        dominated = true;
+                        break;
+                    }
                 }
-                if(dominated){ cols.erase(cols.begin()+i); break; }
+                if(dominated){
+                    cols.erase(cols.begin()+i);
+                    break;
+                }
             }
         }
         turn = 1-turn;
